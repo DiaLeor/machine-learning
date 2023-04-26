@@ -1,6 +1,6 @@
 <p>Taking notes on the <a href="https://www.edx.org/course/data-science-machine-learning">Data Science: Machine Learning</a> course; practicing what I've learned during the previous <a href="https://www.edx.org/course/data-science-productivity-tools">Data Science: Productivity Tools</a> course. For most effective navigation in RStudio, document outine (Ctrl+Shift+O) aligns with the following .R contents:<br></p>
 <br>
-<p>--- Directory: <a href="[]">intro_to_ml</a> ---<br>
+<p>--- Directory: <a href="[]">1_intro_to_ml</a> ---<br>
 <br>
 -- <a href="[]">1.1-notation.R</a><br>
 - Section 1.1 - Notation<br>
@@ -11,7 +11,7 @@
 &emsp;&emsp;<br></p>
 <p><br>
 <br></p>
-<p>--- Directory: <a href="[]">ml_basics</a> ---<br>
+<p>--- Directory: <a href="[]">2_ml_basics</a> ---<br>
 <br>
 -- <a href="[]">2.1-evaluation.R</a><br>
 - Section 2.1 - Basics of Evaluation Machine Learning Algorithms<br>
@@ -39,7 +39,7 @@
 &emsp;&emsp;<br></p>
 <p><br>
 <br></p>
-<p>--- Directory: <a href="[]">prediction</a> ---<br>
+<p>--- Directory: <a href="[]">3_prediction</a> ---<br>
 <br>
 -- <a href="[]">3.1-linear-regression.R</a><br>
 - Section 3.1 - Basics of Evaluation Machine Learning Algorithms<br>
@@ -61,7 +61,7 @@
 &emsp;&emsp;<br></p>
 <p><br>
 <br></p>
-<p>--- Directory: <a href="[]">cross_validation_kNN</a> ---<br>
+<p>--- Directory: <a href="[]">4_cross_validation_kNN</a> ---<br>
 <br>
 -- <a href="[]">4.1-kNN.R</a><br>
 - Section 4.1 - k-Nearest Neighbors<br>
@@ -83,7 +83,7 @@
 &emsp;&emsp;<br></p>
 <p><br>
 <br></p>
-<p>--- Directory: <a href="[]">caret</a> ---<br>
+<p>--- Directory: <a href="[]">5_caret</a> ---<br>
 <br>
 -- <a href="[]">5.1-caret.R</a><br>
 - Section 5.1 - The Caret Package<br>
@@ -103,7 +103,7 @@
 &emsp;&emsp;<br></p>
 <p><br>
 <br></p>
-<p>--- Directory: <a href="[]">model_fitting_recommendation</a> ---<br>
+<p>--- Directory: <a href="[]">6_model_fitting_recommendation</a> ---<br>
 <br>
 -- <a href="[]">6.1-MNIST.R</a><br>
 - Section 6.1 - Case Study: MNIST<br>
