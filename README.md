@@ -59,6 +59,8 @@
 &emsp;&emsp;<br>
 &emsp;&emsp;- Connecting Smoothing to Machine Learning - []<br>
 &emsp;&emsp;<br></p>
+<p><br>
+<br></p>
 <p>--- Directory: <a href="[]">cross_validation_kNN</a> ---<br>
 <br>
 -- <a href="[]">4.1-kNN.R</a><br>
@@ -78,7 +80,9 @@
 &emsp;&emsp;- k-fold Cross-Validation - []<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;- Bootstrap - []<br>
-&emsp;&emsp;<br>
+&emsp;&emsp;<br></p>
+<p><br>
+<br></p>
 <p>--- Directory: <a href="[]">caret</a> ---<br>
 <br>
 -- <a href="[]">5.1-caret.R</a><br>
@@ -96,7 +100,9 @@
 &emsp;&emsp;- Titanic Exercises Pt. 1 - []<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;- Titanic Exercises Pt. 2  - []<br>
-&emsp;&emsp;<br>
+&emsp;&emsp;<br></p>
+<p><br>
+<br></p>
 <p>--- Directory: <a href="[]">model_fitting_recommendation</a> ---<br>
 <br>
 -- <a href="[]">6.1-MNIST.R</a><br>
