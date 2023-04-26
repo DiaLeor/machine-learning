@@ -58,7 +58,7 @@
 &emsp;&emsp;- Beware of Default Smoothing Parameters - []<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;- Connecting Smoothing to Machine Learning - []<br>
-&emsp;&emsp;<br>/p>
+&emsp;&emsp;<br></p>
 <p>--- Directory: <a href="[]">cross_validation_kNN</a> ---<br>
 <br>
 -- <a href="[]">4.1-kNN.R</a><br>
