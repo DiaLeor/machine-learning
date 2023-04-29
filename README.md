@@ -7,7 +7,7 @@
 <br>
 &emsp;&emsp;- Notation - a brief overview of machine learning notation<br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- Example: Zip Code Reader - machine learning notation continued.<br>
+&emsp;&emsp;- Example: Zip Code Reader - machine learning notation continued<br>
 &emsp;&emsp;<br></p>
 <p><br>
 <br></p>
