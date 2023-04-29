@@ -5,9 +5,9 @@
 -- <a href="https://github.com/DiaLeor/machine-learning/blob/main/1_intro_to_ml/1.1-notation.R">1.1-notation.R</a><br>
 - Section 1.1 - Notation<br>
 <br>
-&emsp;&emsp;- Notation - []<br>
+&emsp;&emsp;- Notation - a brief overview of machine learning notation<br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- Example: Zip Code Reader - []<br>
+&emsp;&emsp;- Example: Zip Code Reader - machine learning notation continued.<br>
 &emsp;&emsp;<br></p>
 <p><br>
 <br></p>
