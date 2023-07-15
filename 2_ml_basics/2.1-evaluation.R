@@ -2,22 +2,119 @@
 
 # Evaluation Metrics ------------------------------------------------------
 
+# Before describing approaches to optimize the way we build algorithms, we first need to
+# mathematically define what we mean when we say one approach is better than another.
+# Specifically, we need to quantify what we mean by "better." For our first intro to machine
+# learning (ml) concepts, we'll do a boring and simple example — how to predict sex using
+# height.
+
+# We use the height data from the dslabs package. We start by defining the outcomes and
+# predictors.
+ y <- heights$sex # only one predictor, a categorical outcome (male or female)
+ x <- heights$height
+# We know that we will not be able to predict y very accurately based on just x because male
+# and female average heights are not that different relative to within group variability. But
+# can we do better than guessing? Again, to answer this question, we need a quantitative
+# definition of "better."
+
+# Ultimately, a ml algorithm is evaluated on how it performs in the real world with
+# completely new data sets. However, when developing an algorithm, we usually have a data set
+# for which we know the outcomes (as we do with the heights data set).
+ 
+# To mimic the ultimate evaluation process, we randomly split our data into two — a training set and
+# a test set — and act as if we don't know the outcome of the test set. We develop algorithms using
+# only the training set; the test set is used only for evaluation.
+  # data used to develop algorithm: training set
+  # data used to pretend we don't know the outcome: test set  
+
+# The createDataPartition() function from the caret package can be used to generate indices for
+# randomly splitting data into training and test sets.
+set.seed(2007)
+test_index <- createDataPartition(y, times = 1, p= 0.5, list = FALSE)
 # Note: the set.seed() function is used to obtain reproducible results. This course requires a R
 # version of 3.6 or newer to obtain the same results when setting the seed.
-
-# To mimic the ultimate evaluation process, we randomly split our data into two — a training set and
-# a test set — and act as if we don’t know the outcome of the test set. We develop algorithms using
-# only the training set; the test set is used only for evaluation.
-
-# The createDataPartition() function from the caret package can be used to generate indexes for
-# randomly splitting data.
-
+# The argument times is used to define how many random samples of indices to return. The
+# argument p is used to define what proportion of the data is represented by the index. And the
+# argument list is used to decide if we want the indices to return as a list or not.
 # Note: contrary to what the documentation says, this course will use the argument p as the
-# percentage of data that goes to testing. The indexes made from createDataPartition() should
-# be used to create the test set. Indexes should be created on the outcome and not a predictor.
+# percentage of data that goes to testing. 
+
+# The results of the createDataPartition() call can be used to definte the training and test set.
+# Indices should be created on the outcome and not a predictor:
+test_set <- heights[test_index, ]
+train_set <- heights[-test_index, ]
+
+# We then develop an algorithm using only the training set. And once we're done developing the
+# algorithm, we will freeze it and evaluate it on the test set.
 
 # The simplest evaluation metric for categorical outcomes is overall accuracy: the proportion of
-# cases that were correctly predicted in the test set.
+# cases that were correctly predicted in the test set. This metric is usually referred to as
+# overall accuracy.
+
+# To demonstrate the use of overall accuracy, we can build two competing algorithms and compare
+# them. We start by developing the simplest possible ml algorithm — guessing the outcome:
+y_hat <- sample(c("Male", "Female"), length(test_index), replace = TRUE) %>% 
+  factor(levels = levels(test_set$sex))
+# Note that we're completely ignoring the predictor and simply guessing the sex. The overall
+# accuracy is simply defined as the overall proportion that is predicted correctly, which we can
+# calculate like this:
+mean(y_hat == test_set$sex)
+# Not surprisingly, our accuracy is about 50% — we're guessing. Now, can we do better?
+
+# Exploratory data analysis suggest we can because, on average, males are slightly taller than
+# females. We can see that by just typing this code:
+heights %>% group_by(sex) %>% summarize(mean(height), sd(height))
+# But how do we make use of this insight?
+
+# Another simple approach. Predict male if height is within two sd from the average male height.
+# So if height > 62, we will predict male, otherwise female. We can use this code to do that:
+y_hat <- ifelse(x > 62, "Male", "Female") %>% factor(levels = levels(test_set$sex))
+# The accuracy goes up from 0.5 with our previous guessing algorithm to about 80%, as you can
+# see here:
+mean(y == y_hat)
+# But can we do even better? In the example that we just saw, we use a cutoff of 62. But can we
+# examine the accuracy obtained for other cutoffs and then pick the value that provides the best
+# result?
+
+# Remember, it is important that we optimize the cutoff using only the training set. The test set
+# is only for evaluation (although for this simplistic example it doesn't make much of a
+# difference)! Later, we will learn that evaluating an algorithm on the training set can lead
+# to overfitting for more complex approaches. This often leads to overoptimistic assessments.
+
+# So let's try to build this algorithm. We will optimize our approach by examining the
+# accuracy of 10 different cutoffs and picking the one yielding the best result. You can write
+# this code to do that:
+cutoff <- seq(61, 70)
+accuracy <- map_dbl(cutoff, function(x){
+  y_hat <- ifelse(train_set$height > x, "Male", "Female") %>% 
+    factor(levels = levels(test_set$sex))
+  mean(y_hat == train_set$sex)
+})
+
+# We can then make a plot showing the accuracy obtained for the different cutoffs.
+data.frame(cutoff, accuracy) %>% 
+  ggplot(aes(cutoff, accuracy)) + 
+  geom_point() + 
+  geom_line() 
+
+# We see that the maximum accuracy achieved is about 85%, which is much higher than 50%.
+max(accuracy)
+
+# The selected cutoff that gave us this accuracy was 64. We can find it this way:
+best_cutoff <- cutoff[which.max(accuracy)]
+best_cutoff
+
+# We can now test this cutoff on our test set to make sure accuracy is not overly optimistic.
+y_hat <- ifelse(test_set$height > best_cutoff, "Male", "Female") %>% 
+  factor(levels = levels(test_set$sex))
+y_hat <- factor(y_hat)
+mean(y_hat == test_set$sex)
+# We find that we get an 80% accuracy. We see that our accuracy is a bit lower than the
+# accuracy observed on the training set, but it's still better than guessing.
+
+# Now because we tested on a data set that we did not train on, we know that our result, our
+# 80% result, is not due to cherry picking a good result. This is what we refer to as
+# overtraining. We will learn more about this in future videos.
 
 # ..Code..
 library(tidyverse)
