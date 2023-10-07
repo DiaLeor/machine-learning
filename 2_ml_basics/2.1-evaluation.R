@@ -169,17 +169,39 @@ mean(y_hat == test_set$sex)
 
 # Confusion Matrix --------------------------------------------------------
 
-# Overall accuracy can sometimes be a deceptive measure because of unbalanced classes.
-
-# A general improvement to using overall accuracy is to study sensitivity and specificity separately.
-
-# A confusion matrix tabulates each combination of prediction and actual value. You can create a
-# confusion matrix in R using the table() function or the confusionMatrix() function from the caret
-# package. The confusionMatrix() function will be covered in more detail later.
+# The prediction rule we developed predicts male if the student is taller than 64 inches. Given that
+# the average female is about 64 inches, this prediction rule seems wrong. What happened? If a student
+# is the height of the average female, shouldn't we predict female? Generally speaking, overall
+# accuracy can sometimes be a deceptive measure because of unbalanced classes. To see this, we will
+# start by constructing what is referred to as the confusion matrix, which basically tabulates each
+# combination of prediction and actual value. You can create a confusion matrix in R using the table()
+# function (or the confusionMatrix() function from the caret package — the confusionMatrix() function
+# will be covered in more detail later):
+table(predicted = y_hat, actual = test_set$sex)
+# A problem arises: if we compute the accuracy separately for each sex we get the following results:
+test_set %>%
+  mutate(y_hat = y_hat) %>% 
+  group_by(sex) %>% 
+  summarize(accuracy = mean(y_hat == sex))
+# There is an imbalance in the accuracy for males and females. In other words, too many females are
+# predicted to be male. So how can our overall accuracy be so high then? The reason is that these
+# heights were collected from three data science courses, two of which had more males enrolled.
+# You can see that there's only 22% females in the aggregated data.
+prev <- mean(y == "Female")
+prev
+# So when computing overall accuracy, the high percentage of mistakes made for females is outweighed
+# by the gains in correct calls for males. Think of an extreme example where 99% of the data are males.
+# Then a strategy that always guesses males no matter what will obviously give us a high accuracy.
+# But with a more representative data set, the strategy will be as bad as guessing. This can actually
+# be a big problem in ml.
 
 # If your training data is biased in some way, you are likely to develop algorithms that are biased
-# as well. The problem of biased training sets is so commom that there are groups dedicated to
-# study it.
+# as well. The problem of biased training sets is so common that there are groups dedicated to
+# study it. A first step to discovering these types of problems is to look at metrics other than
+# overall accuracy when evaluating a ml algorithm. There are several metrics that we can use to
+# evaluate an algorithm in a way that prevalence does no cloud our assessment. And these can all be
+# derived from the confusion matrix. A general improvement to using overall accuracy is to study
+# sensitivity and specificity separately.
 
 # ..Code..
 # tabulate each combination of prediction and actual value
@@ -188,11 +210,16 @@ test_set %>%
   mutate(y_hat = y_hat) %>%
   group_by(sex) %>% 
   summarize(accuracy = mean(y_hat == sex))
-prev <- mean(y == "Male")
+
+# calculate the percentage of females in the aggregated data
+prev <- mean(y == "Female")
+prev
 
 confusionMatrix(data = y_hat, reference = test_set$sex)
 
 # Sensitivity, Specificity, and Prevalence --------------------------------
+
+#
 
 # Sensitivity, also known as the true positive rate or recall, is the proportion of actual positive
 # outcomes correctly identified as such: Y_hat = 1 when Y = 1. High sensitivity  means that
