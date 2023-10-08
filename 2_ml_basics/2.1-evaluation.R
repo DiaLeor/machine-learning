@@ -66,6 +66,8 @@ mean(y_hat == test_set$sex)
 heights %>% group_by(sex) %>% summarize(mean(height), sd(height))
 # But how do we make use of this insight?
 
+69.3 - 3.61*2
+
 # Another simple approach. Predict male if height is within two sd from the average male height.
 # So if height > 62, we will predict male, otherwise female. We can use this code to do that:
 y_hat <- ifelse(x > 62, "Male", "Female") %>% factor(levels = levels(test_set$sex))
@@ -305,8 +307,6 @@ cm$overall["Accuracy"]
 cm$byClass[c("Sensitivity","Specificity", "Prevalence")]
 
 # Balanced Accuracy and F1 Score ------------------------------------------
-
-
 
 # For optimization purposes, sometimes it is more useful to have a one number summary than
 # studying both specificity and sensitivity, for example, for optimizing purposes. One preferred
