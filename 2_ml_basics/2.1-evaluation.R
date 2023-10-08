@@ -215,36 +215,85 @@ test_set %>%
 prev <- mean(y == "Female")
 prev
 
-confusionMatrix(data = y_hat, reference = test_set$sex)
-
 # Sensitivity, Specificity, and Prevalence --------------------------------
 
-#
+# We define sensitivity and specificity for binary outcomes. When the outcomes are categorical, we can
+# define these terms for a specific category. For example, in the digits problem, we can ask for the
+# specificity in the case of correctly predicting a 2 as opposed to some other digit. Now, once we
+# specify a category of interest, then we can talk about
+# positive outcomes: Y = 1, and
+# negative outcomes: Y = 0.
+# Note that the words positive and negative are not to be interpreted as in the English language.
+# Negative doesn't necessarily imply bad. For example, in medical testing, a negative test is usually
+# a good outcome.
 
-# Sensitivity, also known as the true positive rate or recall, is the proportion of actual positive
-# outcomes correctly identified as such: Y_hat = 1 when Y = 1. High sensitivity  means that
-# Y = 1 ⟹ Y_hat = 1.
+# In general, sensitivity is defined as the ability of an algorithm to predict a positive outcome when
+# the actual outcome is positive. Sensitivity, also known as the true positive rate or recall, is the
+# proportion of actual positive outcomes correctly identified as such: Y_hat = 1 when Y = 1. High
+# sensitivity  implies that Y = 1 ⟹ Y_hat = 1 (read as Y = 1 implies Y_hat will be 1).
+# Because an algorithm that calls everything positive has perfect sensitivity, this metric on its own
+# is not enough to judge an algorithm. For this reason, we also examine specificity.
 
-#Specificity, also known as the true negative rate, is the proportion of actual negative outcomes
-#that are correctly identified as such: Y_hat = 0 when Y = 0. High specificity means that
-#Y = 0 ⟹ Y_hat = 0.
+# In general, specificity is defined as the ability of an algorithm to predict a negative outcome when
+# the actual outcome is negative. Specificity, also known as the true negative rate, is the proportion
+# of actual negative outcomes that are correctly identified as such: Y_hat = 0 when Y = 0. High
+# specificity implies that Y = 0 ⟹ Y_hat = 0 (read as Y = 0 implies Y_hat will be 0).
+# Specificity can ALSO be thought of as the proportion of positive calls that are actually
+# positive: that is, high specificity also implies that Y = 1 ⟹ Y_hat = 1 (read as Y = 1 
+# implies Y_hat will be 1).
 
-# Specificity can also be thought of as the proportion of positive calls that are actually
-# positive: that is, high specificity means that Y_hat = 1 ⟹ Y = 1.
+# To provide precise definitions, we start by naming the four entries of the confusion matrix like
+# this (there is a small table provided in the video which is not included here):
+# Actually positive & Predicted positive = True positive (TP)
+# Actually negative & Predicted positive = False positive (FP)
+# Actually positive & Predicted negative = False negative (FN)
+# Actually negative & Predicted negative = True negative (TN)
 
-# Sensitivity is typically quantified by (TP)/(TP + FN), the proportion of actual positives
-# (TP + FN) that are called positives (TP). This quantity is also called the true positive
+# Sensitivity is typically quantified by (TP)/(TP + FN), in other words: the proportion of actual
+# positives (TP + FN) that are called positives (TP). This quantity is also called the true positive
 # rate (TPR) or recall.
 
-# Specificity is typically quantified by (TN)/(TN + FP), the proportion of actual negatives
-# (TN + FP) that are called negatives (TN). This quantity is also called the true negative
+# Specificity is typically quantified by (TN)/(TN + FP), in other words: the proportion of actual
+# negatives (TN + FP) that are called negatives (TN). This quantity is also called the true negative
 # rate (TNR).
 
-# Specificity can also be quantified by (TP)/(TP + FP), the proportion of outcomes called
-# positives (TP + FP) that are actually positives (TP). This quantity is called the positive
-# predicitve value (PPV) or precision.
+# However, there's another way of quantifying specificity: (TP)/(TP + FP), the proportion of outcomes
+# called positives (TP + FP) that are actually positives (TP). This quantity is called the positive
+# predictive value (PPV) or precision.
 
-# Prevalence is defined as the proportion of positives.
+# Another important summary that can be extracted from the confusion matrix is the prevalence.
+# Prevalence is defined as the proportion of positives. In our sex and height example, when we use
+# overall accuracy, the fact that our prevalence, the proportion of females, was too low turned out
+# to be a problem.
+  ## NOTE that unlike the TPR and TNR, precision depends on prevalence, since higher
+  ## # prevalence implies you can get higher precision even when guessing.
+
+# There is a useful table included in the official course notes that is useful for remembering the
+# terms. It includes a column that shows the definition if we think of the proportions as
+# probabilities.
+
+# The caret package function confusionMatrix() computes all these metrics for us once we define which
+# category is considered the positives. The function expects factors as inputs. And the first level
+# is considered the positive outcome. In our example, female is the first level because it comes before
+# males alphabetically. Given this choice, using a new terminology, females are Y = 1 (positives) and
+# males are Y = 0 (negatives).
+
+# If we type the following code into R, we see several metrics including accuracy, sensitivity,
+# specificity, and PPV. You can access this directly like this:
+cm <- confusionMatrix(data = y_hat, reference = test_set$sex)
+cm
+# or like this:
+cm$overall["Accuracy"]
+cm$byClass[c("Sensitivity", "Specificity", "Prevalence")]
+# In our example, we can see that the high overall accuracy is possible despite relatively low
+# sensitivity. As we hinted at before, the reason this happens is because of low prevalence. It's
+# only 23%. The proportion of females is low. Because prevalence is low, failing to predict actual
+# females as females (low sensitivity) doesn't lower the accuracy as much as failing to predict
+# actual males as males (low specificity). This is an example of why it is important to examine
+# sensitivity and specificity and not just accuracy.
+ 
+# Before applying this algorithm to general data sets, we need to ask ourselves if prevalence will be
+# the same in new data sets out in the wild. 
 
 # .. Code..
 # get the metrics
