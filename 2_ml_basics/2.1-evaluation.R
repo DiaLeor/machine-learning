@@ -618,14 +618,47 @@ bind_rows(guessing, height_cutoff) %>%
 
 # Loss Function -----------------------------------------------------------
 
-# The most commonly used loss function is the squared loss function. Because we often have a
-# test set with many observations, say N, we use the mean squared error (MSE). In practice, we
-# often report the root mean squared error (RMSE), which is the square root of MSE, because it
-# is in the same units as the outcomes.
+# Up to now, we have described evaluation metrics that apply exclusively to categorical data.
+# Specifically for binary outcomes, we have described how sensitivity, specificity, accuracy,
+# and F1 can be used as quantification of how well the algorithm is working. However, these
+# metrics are not useful for continuous outcomes. The general approach to defining "best" in ml
+# is to define a loss function which can be applied to both categorical and continuous data.
 
-# If the outcomes are binary, both RMSE and MSE are equivalent to one minus accuracy.
+# The most commonly used loss function is the squared loss function:
+  # If y_hat is our prediction and y is the observed outcome, the squared loss function is simply
+  # the difference squared:
+  # (y_hat - y)^2.
+# Because we often have a test set with many observations, say N, we use the mean squared error (MSE):
+# MSE = (1/N)*RSS = (1/N)* the sum from i = 1 through i = N of (Y_hat_i - Y_i)^2.
+# In practice, we often report the root mean squared error (RMSE), which is the square root of MSE,
+# because it is in the same units as the outcomes. But doing the math is often easier with the MSE and
+# is therefore more commonly used in textbooks, since these usually describe theoretical properties
+# of the algorithms.
+
+  ## NOTE if the outcomes are binary, both RMSE and MSE are equivalent to one minus accuracy,
+  ## since (y_hat - y)^2 = 0 if the prediction was correct and 1 otherwise.
+
+# In general, our goal is to build an algorithm that minimizes the loss so it is as close to 0 as
+# possible.
+
+# Because our data is usually a random sample, we can think of the MSE as a random variable and the
+# observed MSE can be thought of as an estimate of the expected MSE, which is mathematical notation
+# can be written like this:
+# Expected MSE = E{(1/N)* the sum from i = 1 through i = N of (Y_hat_i - Y_i)^2},
+  # however this is a theoretical concept because in practice we only have one data set to work with,
+  # but, in theory, we can think of having a very large number of random samples, call it B, apply
+  # our algorithm to each, obtain an MSE for each random sample, and then think of the expected MSE
+  # as the average or this equation:
+  # (1/B)* the sum from b = 1 through b = B * (1/N)* the sum from i = 1 through i = N of
+  # (y_hat_i^b - y_i^b)^2.
+  # Here y_i^b denotes the i-th observation of the b-th random sample and y_hat_i^b is the resulting
+  # prediction obtained from applying the exact same algorithm to the b-th random sample. Again, in
+  # practice, we only observe one random sample. So the expected MSE is only theoretical. However, in
+  # a later lesson, we describe an approach called cross validation that is used to estimate the MSE
+  # by trying to mimic the theoretical quantity.
 
 # Note that there are loss functions other than the squared loss. For example, the Mean Absolute
-# Error uses absolute values instead of squaring the errors. However, we focus on minimizing
-# square loss since it is the most widely used.
+# Error uses absolute values instead of squaring the errors:
+# |Y_hat_i - Y_i|.
+# However, we focus on minimizing square loss since it is the most widely used.
 
