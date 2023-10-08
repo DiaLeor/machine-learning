@@ -306,16 +306,64 @@ cm$byClass[c("Sensitivity","Specificity", "Prevalence")]
 
 # Balanced Accuracy and F1 Score ------------------------------------------
 
+
+
 # For optimization purposes, sometimes it is more useful to have a one number summary than
-# studying both specificity and sensitivity. One preferred metric is balanced accuracy. Because
-# specificity and sensitivity are rates, it is more appropriate to compute the harmonic average.
-# In fact, the F1-score, a widely used one-number summary, is the harmonic average of precision
-# and recall. 
+# studying both specificity and sensitivity, for example, for optimizing purposes. One preferred
+# metric is balanced accuracy (the average of specificity and sensitivity). Because specificity and
+# sensitivity are rates, it is more appropriate to compute the harmonic average. In fact, the F1-score,
+# a widely used one-number summary, is the harmonic average of precision and recall:
+# 1/(.5*((1/recall) + (1/precision))).
+# Because it is easier to write, you often see the harmonic average written like this when defining F1:
+# 2*((precision*recall)/(precision + recall)).
 
-# Depending on the context, some type of errors are more costly than others. The F1-score can
-# be adapted to weigh specificity and sensitivity differently. 
+# Depending on the context, some type of errors are more costly than others. For example, in the case
+# of plane safety, it is much more important to maximize sensitivity over specificity. Failing to
+# predict a plane that will malfunction before it crashes is a much more costly error than grounding
+# a plane when, in fact, the plane is in perfect condition. In a capital murder case, the opposite is
+# true since a false positive can lead to executing an innocent person. The F1-score can be adapted
+# to weigh specificity and sensitivity differently.
 
-# You can compute the F1-score using the F_meas() function in the caret package.
+# To do this, we define a constant (β) to represent how much more important
+# sensitivity is compared to specificity, and then we can consider a weighted harmonic average like
+# this:
+# 1/(β^2/(1+β^2)*(1/recall) + 1/(1+β^2)*(1/precision)).
+
+# You can compute the F1-score using the F_meas() function in the caret package. The F_meas() function
+# computes the summary with the β defaulting to 1, but you can change it to other values.
+
+# So let's rebuild out prediction algorithm this time maximizing the F-score instead of overall
+# accuracy:
+cutoff <- seq(61, 70)
+F_1 <- map_dbl(cutoff, function(x){
+  y_hat <- ifelse(train_set$height > x, "Male", "Female") %>% 
+    factor(levels = levels(test_set$sex))
+  F_meas(data = y_hat, reference = factor(train_set$sex))
+})
+
+# Now intstead of plotting accuracy versus the cutoffs, we'll plot the F1 measure against the cutoffs:
+data.frame(cutoff, F_1) %>% 
+  ggplot(aes(cutoff, F_1)) + 
+  geom_point() + 
+  geom_line()
+
+# We see that F1 is maximized at a value of 65%.
+max(F_1)
+
+# And this maximum is achieved when we use the following cutoff:
+best_cutoff_2 <- cutoff[which.max(F_1)]
+best_cutoff_2
+
+# It's 66. And a cutoff of 66 makes more sense than 64. Furthermore, it balances specificity and
+# sensitivity of our confusion matrix. You can see that by typing this:
+y_hat <- ifelse(test_set$height > best_cutoff_2, "Male", "Female") %>% 
+  factor(levels = levels(test_set$sex))
+sensitivity(data = y_hat, reference = test_set$sex)
+specificity(data = y_hat, reference = test_set$sex)
+
+# We now see that we do much better than guessing and that both sensitivity and specificity are
+# relatively high. Se we can say that we have built our first ml algorithm. It takes height as
+# a predictor and predicts female if you're 66 inches or shorter.
 
 # ..Code..
 # maximize F-score
@@ -344,21 +392,135 @@ specificity(data = y_hat, reference = test_set$sex)
 # Prevalence Matters in Practice ------------------------------------------
 
 # A machine learning algorithm with very high sensitivity and specificity may not be useful
-# in practice when prevalence is close to either 0 or 1. For example, if you develop an
-# algorithm for disease diagnosis with very high sensitivity, but the prevalence of the disease
-# is pretty low, then the precision of your algorithm is probably very low based on Bayes'
-# theorem.
+# in practice when prevalence is close to either 0 or 1. For example, consider the case of a doctor
+# that specializes in a rare disease and is interested in developing an algorithm for predicting who
+# has the disease. If you develop an algorithm for disease diagnosis with very high sensitivity, but
+# the prevalence of the disease is pretty low, then the precision of your algorithm is probably very
+# low based on Bayes' theorem.
 
 # ROC and Precision-Recall Curves -----------------------------------------
 
-# A very common approach to evaluating accuracy and F1-score is to compare them graphically
-# by plotting both. A widely used plot that does this is the receiver operating characteristic
-# (ROC) curve. The ROC curve plots sensitivity (TPR) versus 1 - specificity, also known as the
-# false positive rate (FPR).
+# When comparing two or more methods, for example 1) guessing vs. 2) using a height cutoff, we looked
+# at accuracy and F1. The second method clearly outperforms the first. However, while we consider
+# several cutoffs for the second method, we only consider one approach for the first method (guessing
+# with equal probability). Note that guessing male with higher probabilities would give us higher
+# accuracy due to the bias in this particular sample. You can see it like this, for example:
+p <- 0.9
+n <- length(test_index)
+y_hat <- sample(c("Male", "Female"), n, replace = TRUE, prob=c(p, 1-p)) %>% 
+  factor(levels = levels(test_set$sex))
+mean(y_hat == test_set$sex)
+# But as described above, this would come at the cost of lower sensitivity. The curve we describe
+# next will help us see this. Remember that for each of the parameters we chose, we can get a
+# different sensitivity and specificity. For this reason, a very common approach to evaluating
+# accuracy and F1-score is to compare them graphically by plotting both. A widely used plot that
+# does this is the receiver operating characteristic (ROC) curve. The ROC curve plots sensitivity (TPR)
+# versus 1 - specificity, also known as the false positive rate (FPR). Here we compute these for
+# different probabilities of guessing male:
+probs <- seq(0, 1, length.out = 10)
+guessing <- map_df(probs, function(p){
+  y_hat <- 
+    sample(c("Male", "Female"), n, replace = TRUE, prob=c(p, 1-p)) %>% 
+    factor(levels = c("Female", "Male"))
+  list(method = "Guessing",
+       FPR = 1 - specificity(y_hat, test_set$sex),
+       TPR = sensitivity(y_hat, test_set$sex))
+})
+guessing %>% qplot(FPR, TPR, data =., xlab = "1 - Specificity", ylab = "Sensitivity")
 
-# However, ROC curves have one weakness and it is that neither of the measures plotted depend on
+# We can use similar code to compute these values for our second approach:
+cutoffs <- c(50, seq(60, 75), 80)
+height_cutoff <- map_df(cutoffs, function(x){
+  y_hat <- ifelse(test_set$height > x, "Male", "Female") %>% 
+    factor(levels = c("Female", "Male"))
+  list(method = "Height cutoff",
+       FPR = 1-specificity(y_hat, test_set$sex),
+       TPR = sensitivity(y_hat, test_set$sex))
+})
+
+# Now, by plotting both curves together, we're able to compare sensitivity for every value of
+# specificity:
+bind_rows(guessing, height_cutoff) %>%
+  ggplot(aes(FPR, TPR, color = method)) +
+  geom_line() +
+  geom_point() +
+  xlab("1 - Specificity") +
+  ylab("Sensitivity")
+
+library(ggrepel)
+map_df(cutoffs, function(x){
+  y_hat <- ifelse(test_set$height > x, "Male", "Female") %>% 
+    factor(levels = c("Female", "Male"))
+  list(method = "Height cutoff",
+       cutoff = x, 
+       FPR = 1-specificity(y_hat, test_set$sex),
+       TPR = sensitivity(y_hat, test_set$sex))
+}) %>%
+  ggplot(aes(FPR, TPR, label = cutoff)) +
+  geom_line() +
+  geom_point() +
+  geom_text_repel(nudge_x = 0.01, nudge_y = -0.01)
+
+
+# We can see that we obtain higher sensitivity with our second approach for all values of
+# specificity, which implies it is, in fact, a better method.
+  ## NOTE that the ROC for the guessing approach is on the identity line. This is always the case for
+  ## methods that guess. Also note that when making ROC curves, it is often nice to add the cut-off
+  ## association with each point, as we did in this example.
+
+# The packages pROC and plotROC are useful for generating these plots, but you can also make them
+# yourself using ggplot.
+
+# ROC curves have one weakness and it is that neither of the measures plotted depend on
 # prevalence. In cases in which prevalence matters, we may instead make a precision-recall plot,
-# which has a similar idea with ROC curve.
+# which has a similar idea with ROC curve:
+guessing <- map_df(probs, function(p){
+  y_hat <- sample(c("Male", "Female"), length(test_index), 
+                  replace = TRUE, prob=c(p, 1-p)) %>% 
+    factor(levels = c("Female", "Male"))
+  list(method = "Guess",
+       recall = sensitivity(y_hat, test_set$sex),
+       precision = precision(y_hat, test_set$sex))
+})
+
+height_cutoff <- map_df(cutoffs, function(x){
+  y_hat <- ifelse(test_set$height > x, "Male", "Female") %>% 
+    factor(levels = c("Female", "Male"))
+  list(method = "Height cutoff",
+       recall = sensitivity(y_hat, test_set$sex),
+       precision = precision(y_hat, test_set$sex))
+})
+
+bind_rows(guessing, height_cutoff) %>%
+  ggplot(aes(recall, precision, color = method)) +
+  geom_line() +
+  geom_point()
+
+# From this plot, we immediately see that the precision of guessing is not high. This is because the
+# prevalence is low. Now notice that if we redefine positives to be males and negatives to be females,
+# ROC curve will remain the same. Specificity and sensitivity relationships don't change with that
+# redefinition. However, the precision-recall plot DOES change because it does depend on prevalence,
+# which will go up when we define males as positives. You can see that in this plot:
+guessing <- map_df(probs, function(p){
+  y_hat <- sample(c("Male", "Female"), length(test_index), replace = TRUE, 
+                  prob=c(p, 1-p)) %>% 
+    factor(levels = c("Male", "Female"))
+  list(method = "Guess",
+       recall = sensitivity(y_hat, relevel(test_set$sex, "Male", "Female")),
+       precision = precision(y_hat, relevel(test_set$sex, "Male", "Female")))
+})
+
+height_cutoff <- map_df(cutoffs, function(x){
+  y_hat <- ifelse(test_set$height > x, "Male", "Female") %>% 
+    factor(levels = c("Male", "Female"))
+  list(method = "Height cutoff",
+       recall = sensitivity(y_hat, relevel(test_set$sex, "Male", "Female")),
+       precision = precision(y_hat, relevel(test_set$sex, "Male", "Female")))
+})
+bind_rows(guessing, height_cutoff) %>%
+  ggplot(aes(recall, precision, color = method)) +
+  geom_line() +
+  geom_point()
 
 # ..Code..
 # Note: seed is not set so your results may slightly vary from those shown in the video.
