@@ -16,19 +16,20 @@
 -- <a href="https://github.com/DiaLeor/machine-learning/blob/main/2_ml_basics/2.1-evaluation.R">2.1-evaluation.R</a><br>
 - Section 2.1 - Basics of Evaluation Machine Learning Algorithms<br>
 <br>
-&emsp;&emsp;- Evaluation Metrics - []<br>
+&emsp;&emsp;- Evaluation Metrics - what we mean when we say one approach is "better"<br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- Confusion Matrix - []<br>
+&emsp;&emsp;- Confusion Matrix - understanding the confusion matrix<br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- Sensitivity, Specificity, and Prevalence - []<br>
+&emsp;&emsp;- Sensitivity, Specificity, and Prevalence - defining metrics for binary outcomes<br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- Balanced Accuracy and F1 Score - []<br>
+&emsp;&emsp;- Balanced Accuracy and F1 Score - preferred one-number-summary metrics<br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- Prevalence Matters in Practice - []<br>
+&emsp;&emsp;- Prevalence Matters in Practice - when prevalence is close to either 0 or 1<br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- ROC and Precision-Recall Curves - []<br>
+&emsp;&emsp;- ROC and Precision-Recall Curves - comparing methods graphically by plotting both<br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- Loss Funciton - []<br>
+&emsp;&emsp;- Loss Funciton - a function which can be applied to both categorical and continuous data.
+<br>
 &emsp;&emsp;<br>
 -- <a href="https://github.com/DiaLeor/machine-learning/blob/main/2_ml_basics/2.2-conditional-probabilities.R">2.2-conditional-probabilities.R</a><br>
 - Section 2.2 - Conditional Probabilities<br>
