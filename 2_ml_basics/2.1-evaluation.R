@@ -66,9 +66,8 @@ mean(y_hat == test_set$sex)
 heights %>% group_by(sex) %>% summarize(mean(height), sd(height))
 # But how do we make use of this insight?
 
-69.3 - 3.61*2
-
 # Another simple approach. Predict male if height is within two sd from the average male height.
+69.3 - 3.61*2
 # So if height > 62, we will predict male, otherwise female. We can use this code to do that:
 y_hat <- ifelse(x > 62, "Male", "Female") %>% factor(levels = levels(test_set$sex))
 # The accuracy goes up from 0.5 with our previous guessing algorithm to about 80%, as you can
