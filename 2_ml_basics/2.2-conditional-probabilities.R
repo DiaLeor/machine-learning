@@ -63,14 +63,43 @@
 
 # Conditional Expectations ------------------------------------------------
 
+# For binary data, you can think of the conditional probability Pr(Y = 1 | bold_X = bold_x) as the
+# proportion of ones in the stratum of the population when we observe x (for which bold_X = bold_x).
+# Many of the algorithms we will learn can be applied to both categorical and continuous data due
+# to the connection between conditional probabilities and conditional expectations.
+
+# Because the expectation is the average of values y_1,...,y_n in the population in the case in which
+# the y's are 0 or 1, the expectation is the equivalent to the probability of randomly picking a 1,
+# since the average is simply the proportion of ones:
+# E(Y | bold_X = bold_x) = Pr(Y = 1 | bold_X = bold_x)
 # Due to the connection between conditional probabilities and conditional expectations:
-# p_k(x) = Pr(Y = k | X = x), for k = 1, we often only use the expectation to denote both
-# the conditional probability and conditional expectation.
+# p_k(bold_x) = Pr(Y = k | bold_X = bold_x), for k = 1,...,K
+# we often only use the expectation to denote both the conditional probability and conditional
+# expectation.
+
+# Just like with categorical outcomes, in most applications the same observed predictors do not
+# guarantee the same continuous outcome. Instead, we assume that the outcomes follow the same
+# conditional distribution. We will now explain why we use the conditional expectation to define
+# our predictors.
 
 # For continuous outcomes, we define a loss function to evaluate the model. The most commonly
 # used one is MSE (Mean Squared Error). The reason why we care about the conditional expectation
-# in machine learning is that the expected value minimizes the MSE:
-# Y_hat = E(Y | X = x) minimizes E{(Y_hat - Y)}
+# in machine learning is that the expected value has an attractive mathematical probability that
+# minimizes the MSE:
+# Y_hat = E(Y | bold_X = bold_x) minimizes E{(Y_hat - Y)^2 | bold_X = bold_x}
+# Specifically for all possible precitions y had, the condition expecation minimizes the expected
+# square loss.
+ 
 # Due to this property, a succinct description of the main task of machine learning is that we use
-# data to estimate this conditional expectation for any set of features. The main way in which
-# competing machine learning algorithms differ is in their approach to estimating this expectation.
+# data to estimate this conditional expectation for any set of features:
+# f(bold_x) ≡ E(Y | bold_X = bold_x)
+# bold_x = x_1,...,x_p
+# This is easier said than done since the function can take any shape and p can be very large. To see
+# this, consider a case in which we only have one predictor. The expectation of y given x
+# E{Y | X = x}
+# can be any function of x (a line, a parabola, sine, etc.). It gets even more complicated when we
+# consider instances with a large number of features in which case f(x) is a function of a
+# multi-dimensional vector. For example, in our digit reader problem, there are 784 features.
+
+# The main way in which competing machine learning algorithms differ is in their approach to
+# estimating this expectation.
