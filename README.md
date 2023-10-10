@@ -45,7 +45,7 @@
 -- <a href="https://github.com/DiaLeor/machine-learning/blob/main/3_prediction/3.1-linear-regression.R">3.1-linear-regression.R</a><br>
 - Section 3.1 - Basics of Evaluation Machine Learning Algorithms<br>
 <br>
-&emsp;&emsp;- Linear Regression for Prediciton - []<br>
+&emsp;&emsp;- Linear Regression for Prediction - although it can be too rigid to be useful, it works rather well for some challenges<br>
 &emsp;&emsp;<br>
 -- <a href="https://github.com/DiaLeor/machine-learning/blob/main/3_prediction/3.2-smoothting.R">3.2-smoothing.R</a><br>
 - Section 2.2 - Smoothing<br>
