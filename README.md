@@ -34,9 +34,9 @@
 -- <a href="https://github.com/DiaLeor/machine-learning/blob/main/2_ml_basics/2.2-conditional-probabilities.R">2.2-conditional-probabilities.R</a><br>
 - Section 2.2 - Conditional Probabilities<br>
 <br>
-&emsp;&emsp;- Conditional Probabilites - []<br>
+&emsp;&emsp;- Conditional Probabilites - using Baye's Rule to estimate conditional probabilities<br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- Conditional Expectations - []<br>
+&emsp;&emsp;- Conditional Expectations - the expected value has an attractive mathematical probability that minimizes the MSE<br>
 &emsp;&emsp;<br></p>
 <p><br>
 <br></p>
