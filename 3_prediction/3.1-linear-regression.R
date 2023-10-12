@@ -1,6 +1,7 @@
 ## Section 3.1 - Linear Regression for Prediction
 
-# Case Study: 2 or 7
+# Case Study: 2 or 7? -----------------------------------------------------
+
 
 # In the simple example we've discussed, we only had one predictor. Technically, we can't even consider
 # this a machine learning (ml) challenge, which are characterized by cases with many predictors. Let's
