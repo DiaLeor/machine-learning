@@ -37,9 +37,9 @@
 # or:
 # Y_hat = max_k*p_k(bold_x)
 # In machine learning, this is referred to as Bayes' Rule. This is a theoretical rule because in
-# practice we don't know p(x) (these probabilities). In fact, estimating these conditional probabilities can be thought of as the
-# main challenge of machine learning. The better the estimate of these probabilities, the better our
-# predictor.
+# practice we don't know p(x) (these probabilities). In fact, estimating these conditional probabilities
+# can be thought of as the main challenge of machine learning. The better the estimate of these probabilities,
+# the better our predictor.
 
 # So our predictions depend on two things:
   # 1) how close are the maximum probabilities (max_k*p_k(bold_x)) to 1 or 0 (perfect certainty)
