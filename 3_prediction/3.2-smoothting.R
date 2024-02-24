@@ -2,12 +2,37 @@
 
 # Smoothing ---------------------------------------------------------------
 
-#Smoothing is a very powerful technique used all across data analysis. It is designed to detect
-#trends in the presence of noisy data in cases in which the shape of the trend is unknown. 
+#Smoothing is a very powerful technique used all across data analysis. Other names given to this
+#technique are curve fitting and low pass filtering. It is designed to detect trends in the presence
+#of noisy data in cases in which the shape of the trend is unknown. The name smoothing comes from the
+#fact that to accomplish this feat, we assume that the trend is a smooth surface. In contrast, the
+#noise/deviation from the trend is unpredictably wobbly. We explain the assumptions that permit us
+#to extract the trend from the noise.
 
 #The concepts behind smoothing techniques are extremely useful in machine learning because
 #conditional expectations/probabilities can be thought of as trends of unknown shapes that we
-#need to estimate in the presence of uncertainty.
+#need to estimate in the presence of uncertainty. To explain these concepts, again, we will focus
+#first on a problem with just one predictor. Specifically, we try to estimate the time trend in the
+#2008 US popular vote poll margin (the difference between Obama and McCain).
+
+#For the purposes of this example, do not think of it as a forecasting problem. Instead, we're simply
+#interested in learning the shape of the trend after the election is over and all polling data has
+#been gathered. We assume that for any given day, x, there is a true preference among the electorate.
+#We will represent this with f(x). But due to the uncertainty introduced by polling, each data point
+#comes with an error, which we'll represent with an ∈ (epsilon). A mathematical model for the observed
+#poll margin is therefore the following:
+#Y = f(x) + ∈.
+
+#To think of this as a machine learning problem, consider that we want to predict Y given day x.
+#It would be helpful to know the conditional expectation:
+#f(x) = E(Y | X = x).
+#But since we don't know this conditional expectation, we'll have to estimate it. We start by using
+#regression since it's the only method we have learning up until now. The line we see doesn't appear
+#to describe the trend very well. For example, on Sept. 4, day -62, the Republican Convention was
+#held, and the data suggests that it gave McCain a boost in the polls. However, the regression line
+#doesn't capture this potential trend. To see the lack of fit more clearly, note that points above
+#the fitted line (the blue ones) and those below the red line are not evenly distributed across the
+#days. Therefore, we need an alternative, more flexible approach.
 
 # ..Code..
 # see that the trend is wobbly
