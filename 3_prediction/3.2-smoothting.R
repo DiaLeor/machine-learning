@@ -145,7 +145,6 @@ polls_2008 %>% mutate(smooth = fit$y) %>%
 # is approximately constant in a window (like we do in bin smoother), we assume that the function
 # is locally linear.
 
-
 # A limitation of the bin smoothing approach is that we need small windows for the approximately
 # constant assumptions to hold which may lead to imprecise estimates of f(x). Local weighted
 # regression (loess) permits us to consider larger window sizes. Instead of the one-week window,
@@ -161,15 +160,31 @@ polls_2008 %>% mutate(smooth = fit$y) %>%
 
 # ..Code..
 # The full code can be found in the .R file Handout at the beginning of the section.
-polls_2008 %>% ggplot(aes(day, margin)) +
+polls_2008 %>% ggplot(aes(day, margin)) + 
   geom_point() +
   geom_smooth(color="red", span = 0.15, method = "loess", method.args = list(degree=1))
 
 # Beware of Default Smoothing Parameters ----------------------------------
 
-# Local weighted regression (loess) permits us to fit parabola by considering a larger
-# window size than the one considered while fitting a line.
+# A quick practical note regarding some of the default behavior of loess in R:
 
+# Local weighted regression (loess) permits us to fit parabolas by considering a larger
+# window size than the one considered while fitting a line. Taylor's Theorem also tells us that if
+# you look at any mathematical function closely enough, it looks like a parabola. The theorem also
+# states that you don't have to look as closely when approximating with parabolas as you do when
+# approximating with lines. This means we can make our windows even larger and fit parabolas instead
+# of lines... and this is actually the default procedure of the function loess.
+
+fit <- loess(margin ~ day, degree = 1, span=span, data=polls_2008)
+# You may have noticed that when we show the code for using loess, we set "degree=1." This tells loess
+# to fit polynomials of degree 1 (a fancy name for lines). If you read the help file page of loess,
+# you will see that the argument degree defaults to 2. By default, loess fits parabolas, not lines.
+# When we fit with parabolas, degree = 2 gives us a more wiggly result. We prefer degree = 1 as it is
+# less prone to this kind of noise.
+
+# ggplot permits you to use loess in its geom smooth function. So be careful with default parameters as
+# they are rarely optimal! You can conveniently change them, as seen in the code below:
+ 
 # ..Code..
 # The full code can be found in the .R file Handout at the beginning of the section.
 
@@ -192,6 +207,15 @@ polls_2008 %>% ggplot(aes(day, margin)) +
 
 # Connecting Smoothing to Machine Learning --------------------------------
 
-# In the 2 vs 7 example, we saw that linear regression was not flexible enough to capture
-# the non-linear nature of p(x_1,x_2). Smoothing approaches may provide an improvement in
-# capturing the same.
+# Consider again our 2 versus 7 example: if we define our outcome to be Y = 1 for digits that are
+# 7 and Y = 0 for digits that are 2, the we are interested in  estimating the following conditional
+# probability:
+# p(x_1,x_2) = Pr(Y=1|X_1 = x_1, X_2 = x_2)
+# Here, x_1 and x_2 are the two predictors we defined in a previous video. They represent the average
+# amount of black pixels in two quadrants.
+
+# In this example, the zeros and ones we observe are noisy because, for some regions, the probabilities
+# p(x_1,x_2) are not that close to either 0 or 1. So we need to estimate p(x_1,x_2). Previously, we
+# used linear regression. Smoothing is an alternative to accomplishing this. Though in this example,
+# we saw that linear regression was not flexible enough to capture the non-linear nature of p(x_1,x_2).
+# Smoothing approaches may provide an improvement in capturing the same.
