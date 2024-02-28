@@ -50,15 +50,15 @@
 -- <a href="https://github.com/DiaLeor/machine-learning/blob/main/3_prediction/3.2-smoothting.R">3.2-smoothing.R</a><br>
 - Section 2.2 - Smoothing<br>
 <br>
-&emsp;&emsp;- Smoothing - []<br>
+&emsp;&emsp;- Smoothing - detecting trends in the presence of noisy data in cases in which the shape of the trend is unknown<br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- Bin Smoothing - []<br>
+&emsp;&emsp;- Bin Smoothing - grouping data points into strata in which the value of f(x) can be assumed to be constant in a window<br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- Local Weighted Regression (loess) - []<br>
+&emsp;&emsp;- Local Weighted Regression (loess) - assuming that the function is locally linear, permitting us to consider larger window sizes<br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- Beware of Default Smoothing Parameters - []<br>
+&emsp;&emsp;- Beware of Default Smoothing Parameters - by default: loess fits parabolas, not lines<br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- Connecting Smoothing to Machine Learning - []<br>
+&emsp;&emsp;- Connecting Smoothing to Machine Learning - smoothing approaches may provide an improvement in capturing the non-linear nature of a trend<br>
 &emsp;&emsp;<br></p>
 <p><br>
 <br></p>
