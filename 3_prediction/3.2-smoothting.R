@@ -140,15 +140,24 @@ polls_2008 %>% mutate(smooth = fit$y) %>%
 
 # Local Weighted Regression (loess) ---------------------------------------
 
+# According to Taylor's Theorem, if you look closely enough at any smoothing function f(x), it will
+# look like a line. In local weighted regression (loess)... instead of assuming that the function
+# is approximately constant in a window (like we do in bin smoother), we assume that the function
+# is locally linear.
+
+
 # A limitation of the bin smoothing approach is that we need small windows for the approximately
 # constant assumptions to hold which may lead to imprecise estimates of f(x). Local weighted
-# regression (loess) permits us to consider larger window sizes.
+# regression (loess) permits us to consider larger window sizes. Instead of the one-week window,
+# we consider a larger one in which the trend is approximately linear. We start with a three-week
+# window and later consider and evaluate other options:
+# E[Y_i|X_i = x_i] = β_0 + β_1(x_i - x_0) if |x_i - x_0| <= 21
+# Now for every point x_0, loess defines a window and fites a line in that window. The fitted value
+# at x_0 becomes our estimate f_hat of x_0. The result of loess is a smoother fit than bin smoothing
+# because we use larger sample sizes to estimate our local parameters.
 
-# One important difference between loess and bin smoother is that we assume the smooth function
-# is locally linear in a window instead of constant.
-
-# The result of loess is a smoother fit than bin smoothing because we use larger sample sizes
-# to estimate our local parameters.
+# Now notice that different spans give us different estimates. We can see how different window sizes
+# lead to different estimates just by applying them and looking at the final results.
 
 # ..Code..
 # The full code can be found in the .R file Handout at the beginning of the section.
