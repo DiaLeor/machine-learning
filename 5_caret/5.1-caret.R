@@ -2,22 +2,112 @@
 
 # Caret Package -----------------------------------------------------------
 
-# The caret package helps provides a uniform interface and standardized syntax for the
-# many different machine learning packages in R. Note that caret does not automatically
-# install the packages needed.
+# We have already learned about regression and k-nearest neighbors as machine learning
+# algorithms. In the provided reading materials, you can learn several other algorithms.
+# Many of these algorithms are implemented in R. However, they are distributed via different
+# packages developed by different authors and often use different syntax. The caret package
+# helps provide a uniform interface and standardized syntax for the many different machine
+# learning packages in R. Note that caret does not automatically install the packages needed. The
+# required packages for each method are described in the package manual.
 
-# The train() function automatically uses cross-validation to decide among a few default values
-# of a tuning parameter.
+# Here, we provide some simple examples showing how we use this incredibly helpful package. We will
+# use the 2 or 7 example to illustrate. We load the data like this:
+library(tidyverse)
+library(dslabs)
+data("mnist_27")
 
-# The getModelInfo() and modelLookup() functions can be used to learn more about a model and
-# the parameters that can be optimized.
+# The caret train() function lets us train different algorithms using simple syntax. For example,
+# we're going to fit two algorithms typing the following:
+library(caret)
+train_glm <- train(y ~ ., method = "glm", data = mnist_27$train)
+train_knn <- train(y ~ ., method = "knn", data = mnist_27$train)
 
-# We can use the tunegrid() parameter in the train() function to select a grid of values to
+# To make predictions, we can use the output of this function directly without needing to look at
+# the specifics of the specific packages that implement these algorithms. Instead, we can learn
+# how to obtain predictions using predict.train. The code looks the same for both methods:
+y_hat_glm <- predict(train_glm, mnist_27$test, type = "raw")
+y_hat_knn <- predict(train_knn, mnist_27$test, type = "raw")
+
+# This permits us to quickly compare the algorithms. For example, we can compare the accuracy:
+confusionMatrix(y_hat_glm, mnist_27$test$y)$overall[["Accuracy"]]
+confusionMatrix(y_hat_knn, mnist_27$test$y)$overall[["Accuracy"]]
+
+# When an algorithm includes a tuning parameter, train() automatically uses cross-validation
+# to decide among a few default values that it tries. To find out what parameter or parameters
+# are optimized, you can read the manual or study the output of the the getModelInfo() and
+# modelLookup() functions:
+getModelInfo("knn")
+modelLookup("knn")
+
+# If you run it with default values, you can quickly see the result of the cross-validation using
+# the ggplot() function.
+ggplot(train_knn, highlight = TRUE)
+  # the argument 'highlight' highlights the max
+
+# By default, the cross-validation is performed taking 25 bootstrap samples comprised of 25% of
+# the observations. For the kNN method, the default is to try the parameters k = 5, 7, and 9. We
+# can change this using the tune grid parameter in the train() function to select a grid of values to
 # be compared.
 
-# The trControl parameter and trainControl() function can be used to change the way
-# cross-validation is performed.
-# 
+# The grid of values must be supplied by a data frame with the parameter names as specified in the
+# modelLookup() output. Here, we present an example where we try out 30 values between 9 and 67. To
+# do this with caret, we need to define a column named k:
+data.frame(k = seq(9, 67, 2))
+  # NOTE that when running this code, we're fitting 30 versions of kNN to 25 bootstrap samples.
+  # Since we're filling 30*25, or 750, kNN models, running the following code (which implements all
+  # this) will take several seconds.
+set.seed(2008)
+train_knn <- train(y ~ ., method = "knn",
+                   data = mnist_27$train,
+                   tuneGrid = data.frame(k = seq(9, 71, 2)))
+ggplot(train_knn, highlight = TRUE)
+
+# The ggplot() function shows us the accuracy for all the parameters we tried. To access the parameter
+# that maximizes the accuracy, you can access it using the bestTune component of the output of the
+# train() function:
+train_knn$bestTune
+# and the best performing model like this:
+train_knn$finalModel
+
+# The function predict() will use this best performing model. Here is the accuracy for the best
+# model when applied to the test set, which we have not used at all yet because the cross-validation
+# was done on the training set.
+confusionMatrix(predict(train_knn, mnist_27$test, type = "raw"),
+                mnist_27$test$y)$overall["Accuracy"]
+
+# If we want to change how we perform cross-validation, we can use the trControl parameter and the
+# trainControl() function. We can make the code we just saw a bit faster by using, for example,
+# 10-fold cross-validation. This means we have 10 samples using 10% of the observations each.
+control <- trainControl(method = "cv", number = 10, p = .9)
+train_knn_cv <- train(y ~ ., method = "knn",
+                      data = mnist_27$train,
+                      tuneGrid = data.frame(k = seq(9, 71, 2)),
+                      trControl = control)
+ggplot(train_knn_cv, highlight = TRUE)
+  # We notice that the accuracy estimates are more variable, which is expected since we changed
+  # the number of samples used to estimate accuracy. NOTE that the results component of the 
+  # train output includes several summary statistics related to the variability of the cross-
+  # validation estimate.
+names(train_knn_cv$results)
+
+# Now, let's look at the best fitting kNN model.
+plot_cond_prob <- function(p_hat=NULL){
+  tmp <- mnist_27$true_p
+  if(!is.null(p_hat)){
+    tmp <- mutate(tmp, p=p_hat)
+  }
+  tmp %>% ggplot(aes(x_1, x_2, z=p, fill=p)) +
+    geom_raster(show.legend = FALSE) +
+    scale_fill_gradientn(colors=c("#F8766D","white","#00BFC4")) +
+    stat_contour(breaks=c(0.5),color="black")
+}
+
+plot_cond_prob(predict(train_knn, mnist_27$true_p, type = "prob")[,2])
+
+# The best fitting kNN model approximates the true conditional probability. However, we do see
+# that the boundary is somewhat wiggly. This is because kNN, like the basic bin smoother, does
+# not use a kernel. To improve this, we could use another algorithm called loess.
+
 # Note that not all parameters in machine learning algorithms are tuned. We use the
 # train() function to only optimize parameters that are tunable.
 
