@@ -170,8 +170,35 @@ plot_cond_prob(predict(train_knn, mnist_27$true_p, type = "prob")[,2])
 
 # Fitting with Loess ------------------------------------------------------
 
-# The "gam" package allows us to fit a model using the gamLoess method in caret.
-# This method produces a smoother estimate of the conditional probability than kNN.
+# By reading through the available models part of the manual, we see that we can use
+# the gamLoess method. In this manual, we also see that we need to install the gam package
+# if we have not done so already.
+install.packages("gam")
+
+# The "gam" package allows us to fit a model using the gamLoess method in caret. Then we
+# see that we have two parameters to optimize. 
+modelLookup("gamLoess")
+
+# We will stick to a degree of one to keep it simple. But to try out different values of the
+# span, we'll have to include a column in the table with the name degree so we can do this. So
+# we'll define a grid like this:
+grid <- expand.grid(span = seq(0.15, 0.65, len = 10), degree = 1)
+
+# We will use the default cross-validation control parameters.
+train_loess <- train(y ~ ., 
+                     method = "gamLoess",
+                     tuneGrid=grid,
+                     data = mnist_27$train)
+ggplot(train_loess, highlight = TRUE)
+
+# We can see that this method performs similar to kNN. And we get very similar accuracy.
+confusionMatrix(data = predict(train_loess, mnist_27$test), 
+                reference = mnist_27$test$y)$overall["Accuracy"]
+
+# This method also produces a smoother estimate of the conditional probability than kNN.
+p1 <- plot_cond_prob(predict(train_loess, mnist_27$true_p, type = "prob")[,2])
+p1
+
 
 # ..Code..
 install.packages("gam")
