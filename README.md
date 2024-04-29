@@ -89,11 +89,11 @@
 -- <a href="https://github.com/DiaLeor/machine-learning/blob/main/5_caret/5.1-caret.R">5.1-caret.R</a><br>
 - Section 5.1 - The Caret Package<br>
 <br>
-&emsp;&emsp;- Caret Package - introduction to the caret package<br>
+&emsp;&emsp;- Caret Package - <br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- Fitting with Loess - basics of fitting with loess<br>
+&emsp;&emsp;- Fitting with Loess - <br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- Trees and Random Forests - introduction to trees and random forests<br>
+&emsp;&emsp;- Trees and Random Forests - <br>
 &emsp;&emsp;<br></p>
 <p><br>
 <br></p>
