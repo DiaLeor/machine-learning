@@ -76,11 +76,11 @@
 <br>
 &emsp;&emsp;- Choosing k - how to choose an approprite k value<br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- Mathematical Description of Cross-Validation - <br>
+&emsp;&emsp;- Mathematical Description of Cross-Validation - evaluating the performance of a predictive model by partitioning the dataset into subsets<br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- k-fold Cross-Validation - evaluating the performance of a predictive model by partitioning the dataset into subsets<br>
+&emsp;&emsp;- k-fold Cross-Validation - dividing the dataset into k subsets<br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- Bootstrap - details on the Bootstrap method<br>
+&emsp;&emsp;- Bootstrap - resampling to estimate the distribution of a statistic by repeatedly sampling with replacement from the observed data<br>
 &emsp;&emsp;<br></p>
 <p><br>
 <br></p>
@@ -94,13 +94,6 @@
 &emsp;&emsp;- Fitting with Loess - basics of fitting with loess<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;- Trees and Random Forests - introduction to trees and random forests<br>
-&emsp;&emsp;<br>
--- <a href="https://github.com/DiaLeor/machine-learning/blob/main/5_caret/5.2-titanic.R">5.2-titanic.R</a><br>
-- Section 5.2 - Titanic Exercises<br>
-<br>
-&emsp;&emsp;- Titanic Exercises Pt. 1 - <br>
-&emsp;&emsp;<br>
-&emsp;&emsp;- Titanic Exercises Pt. 2  - []<br>
 &emsp;&emsp;<br></p>
 <p><br>
 <br></p>
@@ -109,29 +102,29 @@
 -- <a href="https://github.com/DiaLeor/machine-learning/blob/main/6_model_fitting_recommendation/6.1-MNIST.R">6.1-MNIST.R</a><br>
 - Section 6.1 - Case Study: MNIST<br>
 <br>
-&emsp;&emsp;- MNIST Case Study: Preprocessing - []<br>
+&emsp;&emsp;- MNIST Case Study: Preprocessing - <br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- MNIST Case Study: kNN - []<br>
+&emsp;&emsp;- MNIST Case Study: kNN - <br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- MNIST Case Study: Random Forest - []<br>
+&emsp;&emsp;- MNIST Case Study: Random Forest - <br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- MNIST Case Study: Variable Importance - []<br>
+&emsp;&emsp;- MNIST Case Study: Variable Importance - <br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- Ensembles - []<br>
+&emsp;&emsp;- Ensembles - <br>
 &emsp;&emsp;<br>
 -- <a href="https://github.com/DiaLeor/machine-learning/blob/main/6_model_fitting_recommendation/6.2-recommendation.R">6.2-recommendation.R</a><br>
 - Section 6.2 - Recommendation Systems<br>
 <br>
-&emsp;&emsp;- Recommendation Systems - []<br>
+&emsp;&emsp;- Recommendation Systems - <br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- Building a Recommendation System - []<br>
+&emsp;&emsp;- Building a Recommendation System - <br>
 &emsp;&emsp;<br>
 -- <a href="https://github.com/DiaLeor/machine-learning/blob/main/6_model_fitting_recommendation/6.3-regularization.R">6.3-regularization</a><br>
 - Section 6.1 - Regularization<br>
 <br>
-&emsp;&emsp;- Regularization - []<br>
+&emsp;&emsp;- Regularization - <br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- Matrix Factorization - []<br>
+&emsp;&emsp;- Matrix Factorization - <br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- SVD and PCA - []<br>
+&emsp;&emsp;- SVD and PCA - <br>
 &emsp;&emsp;<br>
