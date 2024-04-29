@@ -67,20 +67,20 @@
 -- <a href="https://github.com/DiaLeor/machine-learning/blob/main/4_cross_validation_kNN/4.1-kNN.R">4.1-kNN.R</a><br>
 - Section 4.1 - k-Nearest Neighbors<br>
 <br>
-&emsp;&emsp;- k-Nearest-Neighbors (kNN) - []<br>
+&emsp;&emsp;- k-Nearest-Neighbors (kNN) - basics of kNN<br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- Overtraining and Oversmoothing (kNN) - []<br>
+&emsp;&emsp;- Overtraining and Oversmoothing (kNN) - what it means to overtrain and oversmooth in kNN<br>
 &emsp;&emsp;<br>
 -- <a href="https://github.com/DiaLeor/machine-learning/blob/main/4_cross_validation_kNN/4.2-cross-validation.R">4.2-cross-validation.R</a><br>
 - Section 4.2 - Cross Validation<br>
 <br>
-&emsp;&emsp;- Choosing k - []<br>
+&emsp;&emsp;- Choosing k - how to choose an approprite k value<br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- Mathematical Description of Cross-Validation - []<br>
+&emsp;&emsp;- Mathematical Description of Cross-Validation - <br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- k-fold Cross-Validation - []<br>
+&emsp;&emsp;- k-fold Cross-Validation - evaluating the performance of a predictive model by partitioning the dataset into subsets<br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- Bootstrap - []<br>
+&emsp;&emsp;- Bootstrap - details on the Bootstrap method<br>
 &emsp;&emsp;<br></p>
 <p><br>
 <br></p>
@@ -89,16 +89,16 @@
 -- <a href="https://github.com/DiaLeor/machine-learning/blob/main/5_caret/5.1-caret.R">5.1-caret.R</a><br>
 - Section 5.1 - The Caret Package<br>
 <br>
-&emsp;&emsp;- Caret Package - []<br>
+&emsp;&emsp;- Caret Package - introduction to the caret package<br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- Fitting with Loess - []<br>
+&emsp;&emsp;- Fitting with Loess - basics of fitting with loess<br>
 &emsp;&emsp;<br>
-&emsp;&emsp;- Trees and Random Forests - []<br>
+&emsp;&emsp;- Trees and Random Forests - introduction to trees and random forests<br>
 &emsp;&emsp;<br>
 -- <a href="https://github.com/DiaLeor/machine-learning/blob/main/5_caret/5.2-titanic.R">5.2-titanic.R</a><br>
 - Section 5.2 - Titanic Exercises<br>
 <br>
-&emsp;&emsp;- Titanic Exercises Pt. 1 - []<br>
+&emsp;&emsp;- Titanic Exercises Pt. 1 - <br>
 &emsp;&emsp;<br>
 &emsp;&emsp;- Titanic Exercises Pt. 2  - []<br>
 &emsp;&emsp;<br></p>
